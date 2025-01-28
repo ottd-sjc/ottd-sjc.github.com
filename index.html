@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜数字游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>猜数字游戏</h1>
+        <p>我已经想好了一个1到100之间的数字，你能猜到是什么吗？</p>
+        <input type="number" id="guess" placeholder="输入你的猜测" min="1" max="100">
+        <button onclick="checkGuess()">猜一猜</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // 随机生成一个1到100的数字
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+
+        function checkGuess() {
+            const guess = document.getElementById("guess").value;
+            const resultElement = document.getElementById("result");
+
+            if (guess === "") {
+                resultElement.textContent = "请输入一个数字！";
+                return;
+            }
+
+            const guessNumber = parseInt(guess, 10);
+
+            if (isNaN(guessNumber) || guessNumber < 1 || guessNumber > 100) {
+                resultElement.textContent = "请输入一个1到100之间的数字！";
+                return;
+            }
+
+            attempts++;
+
+            if (guessNumber === randomNumber) {
+                resultElement.textContent = `恭喜你！猜对了！数字是 ${randomNumber}，你总共猜了 ${attempts} 次。`;
+            } else if (guessNumber < randomNumber) {
+                resultElement.textContent = "太低了！再试一次。";
+            } else {
+                resultElement.textContent = "太高了！再试一次。";
+            }
+        }
+    </script>
+</body>
+</html>
