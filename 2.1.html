@@ -36,38 +36,16 @@
             pointer-events: none;
             opacity: 0.5;
         }
-        .footer {
-            margin-top: 50px;
-            font-size: 14px;
-            color: #666;
-        }
-        .footer a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>猜数字游戏</h1>
-        <p>我已经想好了一个1到100之间的数字，你能猜到是什么吗？（最高猜测次数为10次，输入"v"可查看当前版本，输入"rizhi"可查看更新日志）</p>
+        <p>我已经想好了一个1到100之间的数字，你能猜到是什么吗？（最高猜测次数为10次，输入"v"可查看当前版本）</p>
         <input type="text" id="guess" placeholder="输入你的猜测">
         <button onclick="checkGuess()" id="guessButton">猜一猜</button>
         <div class="result" id="result"></div>
         <button class="restart-button" id="restartButton" onclick="restartGame()">再来一次</button>
-    </div>
-
-    <div class="footer">
-        <p>查看旧版本：</p>
-        <a href="ottd-sjc.github.io/2.3.html">版本 2.3</a> |
-        <a href="ottd-sjc.github.io/2.2.html">版本 2.2</a> |
-        <a href="ottd-sjc.github.io/2.1.html">版本 2.1</a> |
-        <a href="ottd-sjc.github.io/2.0.html">版本 2.0</a> |
-        <a href="ottd-sjc.github.io/1.1.html">版本 1.1</a> |
-        <a href="ottd-sjc.github.io/1.0.html">版本 1.0</a>
     </div>
 
     <script>
@@ -95,7 +73,7 @@
                 showRestartButton();
                 return;
             } else if (guess === "v") {
-                resultElement.textContent = "当前版本为2.4";
+                resultElement.textContent = "当前版本为2.1";
                 return;
             } else if (guess === "zhiling=1") {
                 resultElement.textContent = `
@@ -104,32 +82,7 @@
                     - 输入 "daan=1"：直接显示答案。
                     - 输入 "v"：查看当前版本。
                     - 输入 "zhiling=1"：显示所有特殊指令。
-                    - 输入 "rizhi"：查看更新日志。
                 `;
-                return;
-            } else if (guess === "rizhi") {
-                resultElement.innerHTML = `
-                    <h2>更新日志</h2>
-                    <ul>
-                        <li><strong>版本 1.0</strong>：初始版本，实现基本的猜数字游戏功能。</li>
-                        <li><strong>版本 1.1</strong>：增加特殊指令，包括查看版本等。</li>
-                        <li><strong>版本 2.0</strong>：增加“再来一次”按钮，游戏结束后显示按钮，点击后重置游戏。</li>
-                        <li><strong>版本 2.1</strong>：增加输入框和按钮的启用/禁用功能，游戏结束后禁用输入框和按钮。</li>
-                        <li><strong>版本 2.2</strong>：增加日志功能，用户输入“rizhi”时显示所有版本的更新日志。</li>
-                        <li><strong>版本 2.3</strong>：增加输入检测，如果用户输入包含数字之外的字符（除了特殊指令），提醒用户并减少剩余猜测次数。</li>
-                        <li><strong>版本 2.4</strong>：增加跳转至旧版本的链接。</li>
-                    </ul>
-                `;
-                return;
-            }
-
-            // 检查输入是否包含非数字字符（除了特殊指令）
-            if (!/^\d+$/.test(guess) && !["wuxian=1", "daan=1", "v", "zhiling=1", "rizhi"].includes(guess)) {
-                resultElement.textContent = "请输入一个有效的数字！";
-                if (!unlimited) {
-                    attempts++;
-                    resultElement.textContent += ` 剩余猜测次数：${maxAttempts - attempts}`;
-                }
                 return;
             }
 
@@ -141,8 +94,20 @@
                 return;
             }
 
+            // 检查输入是否为空
+            if (guess === "") {
+                resultElement.textContent = "请输入一个数字！";
+                return;
+            }
+
             // 将输入转换为数字
             const guessNumber = parseInt(guess, 10);
+
+            // 检查输入是否有效
+            if (isNaN(guessNumber) || guessNumber < 1 || guessNumber > 100) {
+                resultElement.textContent = "请输入一个1到100之间的数字！";
+                return;
+            }
 
             // 增加猜测次数
             attempts++;
